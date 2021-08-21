@@ -30,12 +30,28 @@ string getOnlyFileName(string path)
 			path.pop_back();
 			break;
 		}
-	}
-	for (int i = path.size() - 1; i >= path.size() - 10; i--)
+		path.pop_back();
+	} //cout << path << "############";
+	for (int i = path.size() - 1; i >= 2; i--)
 	{
 		if (path[i] == '\\')
 		{
 			retString.insert(0, path, i, path.size() - i);
+			break;
+		}
+	}
+	//cout << retString << "############";
+	return retString;
+}
+
+string matchXML_withJPG(vector<string> listJPG, string path)
+{
+	string retString = "-";
+	for (int i=0;i<listJPG.size();i++)
+	{
+		if (getOnlyFileName(listJPG[i]) == getOnlyFileName(path))
+		{
+			retString = intToStr(i+1);
 			break;
 		}
 	}
@@ -123,18 +139,25 @@ int main(int argc, char *argv[]) {
 		if(Ret==0) cout << " OK!" << endl;
 		else cout << " Error!" << endl;
 	}
-	cout << "\n\nRename File XML...........\n";
+	cout << "\n\nRename File XML (if matched)...........\n";
 	//list file JPG and jpg
 	for (u_int i = 0; i < listXMLFiles.size(); i++)
 	{
 		cout << listXMLFiles[i];
 		string fileExtension = getFileExtension(listXMLFiles[i]);
-		if(getOnlyFileName(fileExtension)) //matched with old file name
-		string newFileName = path + folderName + "_" + intToStr(i + 1) + fileExtension;
-		cout << "  ->  " << folderName + "_" + intToStr(i + 1) + fileExtension;
-		int Ret = rename(listFiles[i].c_str(), newFileName.c_str());
-		if (Ret == 0) cout << " OK!" << endl;
-		else cout << " Error!" << endl;
+		string matchString = matchXML_withJPG(listFiles, listXMLFiles[i]);
+		if(matchString!="-") //matched with old file name
+		{ 
+			string newFileName = path + folderName + "_" + matchString + fileExtension;
+			cout << " matched #"+ matchString +" ->  " << folderName + "_" + matchString + fileExtension;
+			int Ret = rename(listXMLFiles[i].c_str(), newFileName.c_str());
+			if (Ret == 0) cout << " XML Rename OK!" << endl;
+			else cout << " XML Rename Error!" << endl;
+		}
+		else
+		{
+			cout << " ->  XML is Not Matched to any jpg!" << endl;
+		}
 	}
 
 	_getch();
