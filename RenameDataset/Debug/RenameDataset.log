@@ -1,0 +1,3 @@
+﻿  Source.cpp
+C:\Users\GFAST\source\repos\RenameDataset\RenameDataset\Source.cpp(25,34): warning C4018:  '>=': signed/unsigned mismatch
+  RenameDataset.vcxproj -> C:\Users\GFAST\source\repos\RenameDataset\Debug\RenameDataset.exe
